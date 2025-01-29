@@ -2,6 +2,9 @@
 .gradle/
 build/
 
+# Gradle properties (for serverless architecture constraint)
+gradle.properties
+
 # Local configuration file (sdk path, etc)
 local.properties
 

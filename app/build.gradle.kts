@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp")
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -12,7 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.gitpeek"
+        applicationId = "com.appntech.gitpeek"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -49,6 +48,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/LICENSE-notice.md"
+            excludes += "/META-INF/LICENSE.md"
         }
     }
 }
@@ -63,6 +64,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -95,7 +98,7 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.ktx)
 
-    // Test helpers
+    // Room Test helpers
     testImplementation(libs.androidx.room.testing)
 
     // Paging 3 Integration
@@ -103,19 +106,25 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 
     // For instrumentation tests
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
 
     // For local unit tests
     testImplementation(libs.hilt.android.testing)
-    kaptTest (libs.hilt.android.compiler)
+    kspTest (libs.hilt.android.compiler)
 
-}
+    // Mockk
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockk.agent)
 
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
+    // WorkManager
+    // Kotlin + coroutines
+    implementation(libs.androidx.work.runtime.ktx)
+
 }

@@ -10,6 +10,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.appntech.gitpeek.explore.data.work.GitHubUserSyncWorker
+import com.appntech.gitpeek.explore.data.work.factory.GitHubUserSyncWorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -18,13 +19,13 @@ import javax.inject.Inject
 class GitPeekApplication : Application(), Configuration.Provider {
 
     @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+    lateinit var syncWorkerFactory: GitHubUserSyncWorkerFactory
 
-    // Implement the required property instead of the method (different from the android docs)
+    // Implemented the required property instead of the method (different from the android docs)
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .setWorkerFactory(syncWorkerFactory)
+            .setMinimumLoggingLevel(android.util.Log.VERBOSE)
             .build()
 
     override fun onCreate() {

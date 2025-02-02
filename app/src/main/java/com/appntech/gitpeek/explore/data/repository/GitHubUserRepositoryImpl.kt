@@ -6,6 +6,7 @@ import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.appntech.gitpeek.explore.data.local.GitHubUserDao
 import com.appntech.gitpeek.explore.data.local.asExternalModel
@@ -49,7 +50,7 @@ class GitHubUserRepositoryImpl @Inject constructor(
         localDataSource.upsertAll(networkUsers.asEntities())
     }
 
-    override fun enqueueSyncWork() {
+    override fun enqueueSyncWork(): Flow<WorkInfo?> {
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -63,11 +64,20 @@ class GitHubUserRepositoryImpl @Inject constructor(
                 TimeUnit.MILLISECONDS
             ).build()
 
-        WorkManager.getInstance(context).enqueueUniqueWork(
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueueUniqueWork(
             GitHubUserSyncWorker.WORK_NAME,
             ExistingWorkPolicy.KEEP,
             workRequest
         )
+        // Returns Flow<WorkInfo>
+        return workManager.getWorkInfosForUniqueWorkFlow(
+            GitHubUserSyncWorker.WORK_NAME
+        ).map {
+            workInfoList -> workInfoList.firstOrNull() // Extract only the first WorkInfo
+        }
+
+
     }
 
     companion object {

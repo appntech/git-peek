@@ -10,7 +10,7 @@ data class NetworkGitHubUser(
     val id: Int,
     @SerialName("node_id") val nodeId: String,
     @SerialName("avatar_url") val avatarUrl: String,
-    @SerialName("gravatar") val gravatarId: String,
+    @SerialName("gravatar_id") val gravatarId: String,
     val url: String,
     @SerialName("html_url") val githubProfileUrl: String,
     @SerialName("followers_url") val followersUrl: String,

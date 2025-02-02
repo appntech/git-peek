@@ -2,6 +2,7 @@ package com.appntech.gitpeek.explore.di
 
 import android.content.Context
 import com.appntech.gitpeek.explore.data.network.GitHubApiService
+import com.appntech.gitpeek.explore.data.network.GitHubUserDataSource
 import com.appntech.gitpeek.explore.data.network.monitor.NetworkConnectivityProvider
 import com.appntech.gitpeek.explore.data.network.monitor.NetworkConnectivityProviderImpl
 import com.appntech.gitpeek.explore.data.network.monitor.NetworkMonitor
@@ -67,6 +68,12 @@ object NetworkModule {
     @Singleton
     fun provideNetworkMonitor(connectivityProvider: NetworkConnectivityProvider): NetworkMonitor {
         return NetworkMonitor(connectivityProvider)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGitHubUserDataSource(gitHubApiService: GitHubApiService): GitHubUserDataSource {
+        return GitHubUserDataSource(gitHubApiService)
     }
 
 }

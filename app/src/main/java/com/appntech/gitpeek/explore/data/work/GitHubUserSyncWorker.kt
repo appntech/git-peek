@@ -16,8 +16,8 @@ import java.io.IOException
 class GitHubUserSyncWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    @Assisted private val repository: GitHubUserRepository,
-    @Assisted private val networkMonitor: NetworkMonitor
+    private val repository: GitHubUserRepository,
+    private val networkMonitor: NetworkMonitor
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {

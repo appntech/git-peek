@@ -1,4 +1,4 @@
-package com.example.gitpeek.ui.theme
+package com.appntech.gitpeek.explore.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

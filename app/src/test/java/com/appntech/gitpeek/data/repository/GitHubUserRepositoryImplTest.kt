@@ -11,6 +11,7 @@ import com.appntech.gitpeek.explore.data.repository.GitHubUserRepository
 import com.appntech.gitpeek.explore.data.repository.GitHubUserRepositoryImpl
 import com.appntech.gitpeek.data.network.fake.FakeGitHubApiService
 import com.appntech.gitpeek.data.repository.fake.FakeGitHubUserDao
+import com.appntech.gitpeek.data.repository.fake.FakeGitHubUserDetailDao
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -29,6 +30,7 @@ class GitHubUserRepositoryImplTest {
 
     private lateinit var networkDataSource: GitHubUserDataSource
     private lateinit var localDataSource: FakeGitHubUserDao
+    private lateinit var localDetailDataSource: FakeGitHubUserDetailDao
     private lateinit var gitHubApiService: FakeGitHubApiService
     private lateinit var networkMonitor: NetworkMonitor
     private lateinit var workManager: WorkManager
@@ -39,8 +41,9 @@ class GitHubUserRepositoryImplTest {
 
     @Before
     fun setup() = runBlocking {
-        // Create a fake DAO (GitHubUserDao)
+        // Create a fake DAO
         localDataSource = FakeGitHubUserDao()
+        localDetailDataSource = FakeGitHubUserDetailDao()
 
         // Create the fake GitHub API service with predefined data
         gitHubApiService = FakeGitHubApiService()
@@ -59,22 +62,27 @@ class GitHubUserRepositoryImplTest {
             },
             networkDataSource = networkDataSource,
             localDataSource = localDataSource,
+            localDetailDataSource = localDetailDataSource,
             networkMonitor = networkMonitor
         )
     }
 
+    // Given: Local database has users
+    // When: Calling fetchUsers
+    // Then: Ensure correct users are returned
+
     @Test
-    fun `fetchUsers should return users from local database`() = runTest {
+    fun fetchUsersShouldReturnUsersLocalDatabase() = runTest {
         // Given: Local database has users
         val users = listOf(
             GitHubUserEntity(
-                1,
                 "user1",
+                1,
                 "https://avatars.githubusercontent.com/u/1?v=4",
                 "User"),
             GitHubUserEntity(
-                2,
                 "user2",
+                2,
                 "https://avatars.githubusercontent.com/u/2?v=4",
                 "User")
         )
@@ -86,8 +94,12 @@ class GitHubUserRepositoryImplTest {
         assertEquals(users.asExternalModel(), result)
     }
 
+    // Given: Network is available
+    // When: Calling refreshUsers
+    // Then: Verify that data from networkDataSource was inserted into localDataSource
+
     @Test
-    fun `refreshUsers should fetch from network and update local database`() = runTest {
+    fun refreshUsersShouldFetchFromNetworkUpdateLocalDatabase() = runTest {
         // Given: Network is available
         coEvery { networkMonitor.isConnected } returns MutableStateFlow(true)
 
@@ -99,8 +111,12 @@ class GitHubUserRepositoryImplTest {
         assertEquals(gitHubApiService.getUsers().asEntities(), localUsers)
     }
 
+    // Given: Network is unavailable
+    // When: Calling refreshUsers
+    // Then: Ensure that local database is not updated
+
     @Test
-    fun `refreshUsers should not fetch when network is offline`() = runTest {
+    fun refreshUsersShouldNotFetchFromNetworkWhenOffline() = runTest {
         // Given: Network is unavailable and local database is empty
         coEvery { networkMonitor.isConnected } returns MutableStateFlow(false)
         localDataSource.deleteAllUsers()

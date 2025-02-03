@@ -2,8 +2,8 @@ package com.appntech.gitpeek.explore.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appntech.gitpeek.explore.data.model.GitHubUser
 import com.appntech.gitpeek.explore.data.repository.GitHubUserRepository
+import com.appntech.gitpeek.explore.data.work.GitHubUserSyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,7 +39,7 @@ class GitHubUserViewModel @Inject constructor(
     private fun syncGitHubUsers() {
         syncJob?.cancel()
         syncJob = viewModelScope.launch {
-            gitHubUserRepository.enqueueSyncWork()
+            gitHubUserRepository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
                 .filter { it?.state?.isFinished ?: false } // Only trigger fetch when work is done
                 .collect {
                     fetchGitHubUsers() // Fetch updated users from Room
@@ -92,7 +95,7 @@ class GitHubUserViewModel @Inject constructor(
 
     fun onPullToRefreshTrigger() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isRefreshing = true) }
+            _uiState.update { it.copy(isRefreshing = true, currentTimestamp = getCurrentTimestamp()) }
             try {
                 // For user to see the last updated timestamp (for demo purposes only)
                 delay(1500)
@@ -110,13 +113,9 @@ class GitHubUserViewModel @Inject constructor(
         }
     }
 
-    //TODO
-    fun onGitHubUserClick(user: GitHubUser) {
-        // Handle the click event
-        println("User clicked: ${user.username}")
-
-        // Navigate to detail screen
-        // For example, navigating to a detail screen in a navigation controller:
-        // _navigationEvent.value = NavigationEvent.GoToDetailScreen(user)
+    private fun getCurrentTimestamp(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(Date())
     }
+
 }

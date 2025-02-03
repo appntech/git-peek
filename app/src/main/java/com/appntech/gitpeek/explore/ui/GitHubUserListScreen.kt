@@ -49,15 +49,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GitHubUserScreen(viewModel: GitHubUserViewModel = hiltViewModel()) {
+fun GitHubUserListScreen(
+    navController: NavController,
+    viewModel: GitHubUserViewModel = hiltViewModel()
+) {
 
     // Observe the UI state from the ViewModel
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,7 +70,6 @@ fun GitHubUserScreen(viewModel: GitHubUserViewModel = hiltViewModel()) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     // Create a filtered list based on the search query.
-    // Adjust "name" to whatever property you need to filter on.
     val filteredUserItems = if (searchQuery.isEmpty()) {
         uiState.userItems
     } else {
@@ -189,6 +189,7 @@ fun GitHubUserScreen(viewModel: GitHubUserViewModel = hiltViewModel()) {
                         Text(text = "Error: ${uiState.userMessage}", color = Color.Red)
                     }
                 }
+
                 else -> {
                     // If the list is empty, show a message or loading indicator
                     if (uiState.userItems.isEmpty()) {
@@ -217,7 +218,7 @@ fun GitHubUserScreen(viewModel: GitHubUserViewModel = hiltViewModel()) {
                         //Last updated timestamp
                         if (uiState.isRefreshing) {
                             Text(
-                                "Last updated: ${getCurrentTimestamp()}",
+                                "Last updated: ${uiState.currentTimestamp}",
                                 modifier = Modifier
                                     .padding(top = 80.dp)
                                     .align(Alignment.TopCenter)
@@ -238,8 +239,9 @@ fun GitHubUserScreen(viewModel: GitHubUserViewModel = hiltViewModel()) {
                                 .fillMaxSize()
                         ) {
                             items(filteredUserItems) { user ->
-                                GitHubUserItem(user = user, onItemClick = { clickedUser ->
-                                    viewModel.onGitHubUserClick(clickedUser)
+                                GitHubUserItem(user = user, onItemClick = {
+                                    // Navigate to the detail screen with the user's username
+                                    navController.navigate("user_detail/${user.username}")
                                 })
                             }
                         }
@@ -248,9 +250,4 @@ fun GitHubUserScreen(viewModel: GitHubUserViewModel = hiltViewModel()) {
             }
         }
     }
-}
-
-fun getCurrentTimestamp(): String {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    return dateFormat.format(Date())
 }

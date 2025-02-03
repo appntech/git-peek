@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import com.appntech.gitpeek.explore.data.local.GitPeekDatabase
 import com.appntech.gitpeek.explore.data.local.GitHubUserDao
+import com.appntech.gitpeek.explore.data.local.GitHubUserDetailDao
 import javax.inject.Singleton
 
 @Module
@@ -27,4 +28,8 @@ object DatabaseModule {
 
     @Provides
     fun provideGitHubUserDao(database: GitPeekDatabase): GitHubUserDao = database.gitHubUserDao()
+
+    @Provides
+    fun provideGitHubUserDetailDao(database: GitPeekDatabase): GitHubUserDetailDao = database.userDetailDao()
+
 }

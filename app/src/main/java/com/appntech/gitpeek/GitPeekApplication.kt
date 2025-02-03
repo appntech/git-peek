@@ -1,15 +1,16 @@
 package com.appntech.gitpeek
 
 import android.app.Application
-import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.BackoffPolicy
 import androidx.work.Configuration
 import androidx.work.Constraints
+import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.appntech.gitpeek.explore.data.work.GitHubUserSyncWorker
+import com.appntech.gitpeek.explore.data.work.GitHubUserSyncWorker.Companion.WORK_TYPE_KEY
 import com.appntech.gitpeek.explore.data.work.factory.GitHubUserSyncWorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
@@ -40,8 +41,14 @@ class GitPeekApplication : Application(), Configuration.Provider {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)  // Example input data
+            .build()
+
+
         val workRequest = OneTimeWorkRequestBuilder<GitHubUserSyncWorker>()
             .setConstraints(constraints)
+            .setInputData(inputData)
             .setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
                 MIN_BACKOFF_DELAY,

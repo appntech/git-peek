@@ -13,4 +13,8 @@ class GitHubUserDataSource @Inject constructor(
     suspend fun fetchGitHubUsers(): List<NetworkGitHubUser> = accessMutex.withLock {
         return gitHubApiService.getUsers()
     }
+
+    suspend fun fetchUserDetail(username: String): NetworkGitHubUserDetail = accessMutex.withLock {
+        return gitHubApiService.getUserDetail(username)
+    }
 }

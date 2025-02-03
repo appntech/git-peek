@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.flow
 class FakeGitHubUserDao : GitHubUserDao {
     private val users = mutableListOf(
         GitHubUserEntity(
-            1,
             "user1",
+            1,
             "https://avatars.githubusercontent.com/u/1?v=4",
             "User"),
         GitHubUserEntity(
-            2,
             "user2",
+            2,
             "https://avatars.githubusercontent.com/u/2?v=4",
             "User")
     )

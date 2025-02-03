@@ -22,12 +22,20 @@ class GitHubUserSyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            if (networkMonitor.isConnected.value) {
-                repository.refreshUsers()
-                Result.success()
-            } else {
-                Result.retry() // Retry when network becomes available
+            if (!networkMonitor.isConnected.value) {
+                return Result.retry() // Retry when network is available
             }
+
+            when (inputData.getString(WORK_TYPE_KEY)) {
+                WORK_TYPE_USERS -> repository.refreshUsers()
+                WORK_TYPE_USER_DETAIL -> {
+                    val username = inputData.getString(USERNAME_KEY) ?: return Result.failure()
+                    repository.refreshUserDetail(username)
+                }
+                else -> return Result.failure() // Invalid work type
+            }
+
+            Result.success()
         }
         catch (e: Exception) {
             Log.e(WORK_NAME, "Error syncing GitHub users")
@@ -76,5 +84,9 @@ class GitHubUserSyncWorker @AssistedInject constructor(
 
     companion object {
         const val WORK_NAME = "GitHubUserSyncWorker"
+        const val WORK_TYPE_KEY = "WORK_TYPE"
+        const val USERNAME_KEY = "USERNAME"
+        const val WORK_TYPE_USERS = "USERS"
+        const val WORK_TYPE_USER_DETAIL = "USER_DETAIL"
     }
 }

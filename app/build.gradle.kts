@@ -119,7 +119,7 @@ dependencies {
     kaptTest (libs.hilt.android.compiler)
 
     // Hilt Navigation Compose
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Mockk
     testImplementation(libs.mockk)
@@ -133,9 +133,14 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
 
     //Coil
-    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    //Google fonts
+    implementation(libs.androidx.ui.text.google.fonts)
 }
 
 kapt {

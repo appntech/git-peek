@@ -2,6 +2,7 @@ package com.appntech.gitpeek.data.network
 
 import com.appntech.gitpeek.explore.data.network.NetworkGitHubUser
 import com.appntech.gitpeek.explore.data.network.GitHubApiService
+import com.appntech.gitpeek.explore.data.network.NetworkGitHubUserDetail
 
 class FakeGitHubApiService: GitHubApiService {
     override suspend fun getUsers(): List<NetworkGitHubUser> {
@@ -50,5 +51,24 @@ class FakeGitHubApiService: GitHubApiService {
             )
         )
 
+    }
+    override suspend fun getUserDetail(username: String): NetworkGitHubUserDetail {
+        return NetworkGitHubUserDetail(
+            login = username,
+            id = 1,
+            avatarUrl = "https://avatars.githubusercontent.com/u/1?v=4",
+            githubProfileUrl = "https://github.com/$username",
+            name = "User Name",
+            blog = "https://fakeblog.com",
+            location = "Fake City",
+            bio = "This is a fake user bio.",
+            twitterUsername = "fakeTwitter",
+            publicRepos = 10,
+            publicGists = 5,
+            followers = 100,
+            following = 50,
+            accountCreatedAt = "2024-01-01T00:00:00Z",
+            lastUpdatedAt = "2024-01-02T00:00:00Z"
+        )
     }
 }

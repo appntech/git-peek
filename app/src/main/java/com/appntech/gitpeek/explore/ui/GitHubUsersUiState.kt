@@ -11,5 +11,6 @@ data class GitHubUsersUiState(
     val isRefreshing: Boolean = false,
     val isError: Boolean = false,
     val userItems: List<GitHubUser> = emptyList(),
-    val userMessage: String? = null
+    val userMessage: String? = null,
+    val currentTimestamp: String? = null
 )

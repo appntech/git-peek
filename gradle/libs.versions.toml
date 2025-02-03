@@ -1,6 +1,8 @@
 [versions]
 agp = "8.6.1"
+coilCompose = "3.0.4"
 hiltAndroid = "2.55"
+hiltNavigationCompose = "1.2.0"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -15,6 +17,7 @@ loggingInterceptor = "4.11.0"
 mockk = "1.13.16"
 mockkAgent = "1.13.16"
 mockkAndroid = "1.13.16"
+navigationCompose = "2.8.6"
 okhttp = "4.11.0"
 retrofit = "2.9.0"
 retrofit2KotlinxSerializationConverter = "0.8.0"
@@ -23,13 +26,19 @@ roomKtx = "2.6.1"
 roomPaging = "2.6.1"
 roomRuntime = "2.6.1"
 roomTesting = "2.6.1"
+uiTextGoogleFonts = "1.7.7"
 workRuntimeKtx = "2.10.0"
 hiltWork = "1.2.0"
 workTesting = "2.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }

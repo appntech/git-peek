@@ -36,13 +36,13 @@ class GitHubUserDaoTest {
     fun insertUsersAndGetUsers() = runTest {
         val users = listOf(
             GitHubUserEntity(
-                1,
                 "mojombo",
+                1,
                 "https://avatars.githubusercontent.com/u/1?v=4",
                 "User"),
             GitHubUserEntity(
-                2,
                 "defunkt",
+                2,
                 "https://avatars.githubusercontent.com/u/2?v=4",
                 "Organization")
         )
@@ -62,8 +62,8 @@ class GitHubUserDaoTest {
     fun deleteUsersAndGetUsers() = runTest {
         val users = listOf(
             GitHubUserEntity(
-            1,
             "mojombo",
+            1,
             "https://avatars.githubusercontent.com/u/1?v=4",
             "User")
         )

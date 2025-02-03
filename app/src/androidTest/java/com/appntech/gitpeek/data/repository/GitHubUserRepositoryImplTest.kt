@@ -10,6 +10,7 @@ import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import com.appntech.gitpeek.data.network.FakeGitHubApiService
 import com.appntech.gitpeek.data.repository.fake.FakeGitHubUserDao
+import com.appntech.gitpeek.data.repository.fake.FakeGitHubUserDetailDao
 import com.appntech.gitpeek.explore.data.network.GitHubUserDataSource
 import com.appntech.gitpeek.explore.data.network.monitor.NetworkMonitor
 import com.appntech.gitpeek.explore.data.repository.GitHubUserRepository
@@ -28,6 +29,7 @@ class GitHubUserRepositoryImplTest {
     // Mocks
     private lateinit var networkDataSource: GitHubUserDataSource
     private lateinit var localDataSource: FakeGitHubUserDao
+    private lateinit var localDetailDataSource: FakeGitHubUserDetailDao
     private lateinit var gitHubApiService: FakeGitHubApiService
     private lateinit var networkMonitor: NetworkMonitor
     private lateinit var repository: GitHubUserRepository
@@ -53,6 +55,7 @@ class GitHubUserRepositoryImplTest {
 
         // Initialize fake data sources and API service
         localDataSource = FakeGitHubUserDao()
+        localDetailDataSource = FakeGitHubUserDetailDao()
         gitHubApiService = FakeGitHubApiService()
 
         // Mocks for networkDataSource
@@ -65,6 +68,7 @@ class GitHubUserRepositoryImplTest {
             context = context,
             networkDataSource = networkDataSource,
             localDataSource = localDataSource,
+            localDetailDataSource = localDetailDataSource,
             networkMonitor = networkMonitor
         )
     }
@@ -78,11 +82,11 @@ class GitHubUserRepositoryImplTest {
     fun enqueueSyncWorkShouldEnqueueWork() {
 
         // enqueueSyncWork is called
-        repository.enqueueSyncWork()
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
 
         // Get the WorkInfo for the enqueued work
         val workInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
 
         // Assert that the work is enqueued and is in the correct state
         assert(workInfoList.isNotEmpty())
@@ -98,11 +102,11 @@ class GitHubUserRepositoryImplTest {
     fun enqueueSyncWorkShouldKeepExistingWork() {
 
         // Enqueue the first work
-        repository.enqueueSyncWork()
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
 
         // Get the WorkInfo and WorkRequestId for the first enqueued work
         val firstWorkInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
 
         val firstWorkRequestId = firstWorkInfoList[0].id
 
@@ -112,11 +116,11 @@ class GitHubUserRepositoryImplTest {
 
 
         // Attempt to enqueue the second work
-        repository.enqueueSyncWork()
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
 
         // Get the WorkInfo and WorkRequestId for the second enqueued work
         val secondWorkInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
 
         val secondWorkRequestId = secondWorkInfoList[0].id
 
@@ -135,11 +139,11 @@ class GitHubUserRepositoryImplTest {
     fun enqueueSyncWorkShouldSetCorrectConstraints() {
 
         // Enqueue the work
-        repository.enqueueSyncWork()
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
 
         // Get the WorkInfo for the enqueued work
         val workInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
 
         // Assert that the work is enqueued with the correct constraints
         assert(workInfoList.isNotEmpty())

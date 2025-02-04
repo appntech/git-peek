@@ -35,7 +35,7 @@ GitPeek is an **offline-first** Android app that allows users to browse GitHub p
 ## 📸 Screenshots  
 
 ### 🔹🔹 App Demo                                                 🔹🔹 User List Screen  🔹🔹 User Detail Screen  🔹🔹 Search Feature  🔹🔹    
-<img src="https://i.imgur.com/eR1CoPu.gif" width="200">  <img src="https://i.imgur.com/GPrhFON.png" width="200">  <img src="https://i.imgur.com/MJNzE0H.png" width="200"> <img src="https://i.imgur.com/nsOhRKN.png" width="200"> 
+<img src="https://i.imgur.com/dWWpBYN.gif" width="200">  <img src="https://i.imgur.com/GPrhFON.png" width="200">  <img src="https://i.imgur.com/MJNzE0H.png" width="200"> <img src="https://i.imgur.com/nsOhRKN.png" width="200"> 
 
 ---
 ## 📡 API Details  

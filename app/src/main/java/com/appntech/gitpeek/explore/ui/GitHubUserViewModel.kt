@@ -42,7 +42,7 @@ class GitHubUserViewModel @Inject constructor(
             gitHubUserRepository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
                 .filter { it?.state?.isFinished ?: false } // Only trigger fetch when work is done
                 .collect {
-                    fetchGitHubUsers() // Fetch updated users from Room
+                    //log with timber "SyncJob", "Sync completed: ${it?.state}"
                 }
         }
     }

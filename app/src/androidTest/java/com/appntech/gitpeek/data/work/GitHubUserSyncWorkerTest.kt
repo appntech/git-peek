@@ -2,12 +2,14 @@ package com.appntech.gitpeek.data.work
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.work.Data
 import androidx.work.ListenableWorker
 import androidx.work.testing.TestListenableWorkerBuilder
 import com.appntech.gitpeek.data.work.factory.TestGitHubUserSyncWorkerFactory
 import com.appntech.gitpeek.explore.data.network.monitor.NetworkMonitor
 import com.appntech.gitpeek.explore.data.repository.GitHubUserRepository
 import com.appntech.gitpeek.explore.data.work.GitHubUserSyncWorker
+import com.appntech.gitpeek.explore.data.work.GitHubUserSyncWorker.Companion.WORK_TYPE_KEY
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -51,10 +53,15 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context).setWorkerFactory(
             workerFactory
-        ).build()
+        ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -82,10 +89,15 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context).setWorkerFactory(
             workerFactory
-        ).build()
+        ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -119,11 +131,16 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context)
             .setWorkerFactory(
                 workerFactory
-            ).build()
+            ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -157,11 +174,16 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context)
             .setWorkerFactory(
                 workerFactory
-            ).build()
+            ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -195,11 +217,16 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context)
             .setWorkerFactory(
                 workerFactory
-            ).build()
+            ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -233,11 +260,16 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context)
             .setWorkerFactory(
                 workerFactory
-            ).build()
+            ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -271,11 +303,16 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context)
             .setWorkerFactory(
                 workerFactory
-            ).build()
+            ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -304,11 +341,16 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context)
             .setWorkerFactory(
                 workerFactory
-            ).build()
+            ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()
@@ -328,7 +370,7 @@ class GitHubUserSyncWorkerTest {
     fun testGitHubUserSyncWorker_retryOnNetworkError() = runBlocking {
         // Simulate network connected but API fails
         every { networkMonitor.isConnected.value } returns true
-        // Simulate IOException
+        // Simulate IOException - still investigating as Mockk wraps IOException in UndeclaredThrowableException
         coEvery { repository.refreshUsers() } throws IOException("Network error")
 
         // Create test worker factory with mocks
@@ -337,11 +379,16 @@ class GitHubUserSyncWorkerTest {
             networkMonitor
         )
 
+        // Create input data
+        val inputData = Data.Builder()
+            .putString(WORK_TYPE_KEY, GitHubUserSyncWorker.WORK_TYPE_USERS)
+            .build()
+
         // Build the worker using TestListenableWorkerBuilder and custom factory
         val worker = TestListenableWorkerBuilder<GitHubUserSyncWorker>(context)
             .setWorkerFactory(
                 workerFactory
-            ).build()
+            ).setInputData(inputData).build()
 
         // Perform work
         val result = worker.doWork()

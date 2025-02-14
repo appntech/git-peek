@@ -82,11 +82,11 @@ class GitHubUserRepositoryImplTest {
     fun enqueueSyncWorkShouldEnqueueWork() {
 
         // enqueueSyncWork is called
-        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_NAME)
 
         // Get the WorkInfo for the enqueued work
         val workInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
 
         // Assert that the work is enqueued and is in the correct state
         assert(workInfoList.isNotEmpty())
@@ -102,11 +102,11 @@ class GitHubUserRepositoryImplTest {
     fun enqueueSyncWorkShouldKeepExistingWork() {
 
         // Enqueue the first work
-        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_NAME)
 
         // Get the WorkInfo and WorkRequestId for the first enqueued work
         val firstWorkInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
 
         val firstWorkRequestId = firstWorkInfoList[0].id
 
@@ -116,11 +116,11 @@ class GitHubUserRepositoryImplTest {
 
 
         // Attempt to enqueue the second work
-        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_NAME)
 
         // Get the WorkInfo and WorkRequestId for the second enqueued work
         val secondWorkInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
 
         val secondWorkRequestId = secondWorkInfoList[0].id
 
@@ -139,11 +139,11 @@ class GitHubUserRepositoryImplTest {
     fun enqueueSyncWorkShouldSetCorrectConstraints() {
 
         // Enqueue the work
-        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_TYPE_USERS)
+        repository.enqueueSyncWork(GitHubUserSyncWorker.WORK_NAME)
 
         // Get the WorkInfo for the enqueued work
         val workInfoList = workManager.
-        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_TYPE_USERS).get()
+        getWorkInfosForUniqueWork(GitHubUserSyncWorker.WORK_NAME).get()
 
         // Assert that the work is enqueued with the correct constraints
         assert(workInfoList.isNotEmpty())

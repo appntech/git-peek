@@ -366,11 +366,12 @@ class GitHubUserSyncWorkerTest {
     //When: The network is connected but API call fails with an IOException
     //Then: The worker should retry the API call
 
+
     @Test
     fun testGitHubUserSyncWorker_retryOnNetworkError() = runBlocking {
         // Simulate network connected but API fails
         every { networkMonitor.isConnected.value } returns true
-        // Simulate IOException - still investigating as Mockk wraps IOException in UndeclaredThrowableException
+        // Simulate IOException
         coEvery { repository.refreshUsers() } throws IOException("Network error")
 
         // Create test worker factory with mocks
